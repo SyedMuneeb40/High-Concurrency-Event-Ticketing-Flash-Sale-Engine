@@ -36,6 +36,6 @@ public class Booking {
     @CreationTimestamp
     private Timestamp bookedAt;
 
-    @OneToOne(mappedBy = "bookings")
+    @OneToOne(mappedBy = "booking")
     private Receipt receipt;
 }

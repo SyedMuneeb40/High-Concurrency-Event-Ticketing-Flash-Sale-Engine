@@ -1,8 +1,11 @@
 package com.zynvora.flash_ticket_system.Repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import com.zynvora.flash_ticket_system.Entity.Event;
+import java.util.Optional;
 
-public interface RoleRepository extends JpaRepository<Event,Long> {
-    
+import org.springframework.data.jpa.repository.JpaRepository;
+import com.zynvora.flash_ticket_system.Entity.Role;
+
+
+public interface RoleRepository extends JpaRepository<Role,Long> {
+    Optional<Role> findByRoleName(String role_name);
 }

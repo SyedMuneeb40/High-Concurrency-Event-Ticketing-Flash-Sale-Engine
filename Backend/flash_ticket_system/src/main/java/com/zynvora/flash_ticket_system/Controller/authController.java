@@ -2,27 +2,39 @@ package com.zynvora.flash_ticket_system.Controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.zynvora.flash_ticket_system.Dto.AuthResponse;
+import com.zynvora.flash_ticket_system.Dto.LoginRequest;
+import com.zynvora.flash_ticket_system.Dto.SignupRequest;
+import com.zynvora.flash_ticket_system.Service.AuthService;
+
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @RestController
 @RequestMapping("/auth")
 @AllArgsConstructor
 public class authController {
 
-    public final RedisTemplate<String,String> redisTemplate;
+    private final AuthService authService;
 
-    @PostMapping("/admin/check/{name}")
-    public String adminCheck(@PathVariable String name) {
-        redisTemplate.opsForValue().set("ADMIN", name);
-        return "HELLO ADMIN THANKS FOR COMING :" + redisTemplate.opsForValue().get("ADMIN");
+    @PostMapping("/register")
+    public ResponseEntity<String> register(@Valid @RequestBody SignupRequest signupRequest) {
+        authService.register(signupRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Successfully User is Registered");
     }
 
-    @PostMapping("/user/check/{name}")
-    public String userCheck(@PathVariable String name) {
-        redisTemplate.opsForValue().set("USER", name);
-        return "HELLO USER THANKS FOR COMING :" + redisTemplate.opsForValue().get("USER");
+    @PostMapping("/login")
+    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
+        AuthResponse authreposne = authService.login(request);
+        
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(authreposne);
     }
+    
+    
 }

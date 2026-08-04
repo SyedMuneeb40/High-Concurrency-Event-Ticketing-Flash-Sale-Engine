@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class JwtService {
     
-    private JwtProperties jwtProperties;
+    private final JwtProperties jwtProperties;
 
     //making key
     private SecretKey getSigningKey(){
@@ -61,7 +61,7 @@ public class JwtService {
     //checking token is valid or not
 
     public boolean isValid (String token , UserDetails userDetails){
-        return extractUsername(token).equals(userDetails.getUsername()) && extractClaims(token).getExpiration().before(new Date());
+        return extractUsername(token).equals(userDetails.getUsername()) && extractClaims(token).getExpiration().after(new Date());
     }
 
 
@@ -75,5 +75,8 @@ public class JwtService {
                     .getPayload();
 
     }
+
+
+
 
 }
