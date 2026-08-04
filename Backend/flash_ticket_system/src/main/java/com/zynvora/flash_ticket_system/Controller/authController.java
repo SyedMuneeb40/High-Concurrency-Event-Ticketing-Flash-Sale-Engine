@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.zynvora.flash_ticket_system.Dto.AuthResponse;
 import com.zynvora.flash_ticket_system.Dto.LoginRequest;
+import com.zynvora.flash_ticket_system.Dto.RefreshTokenRequest;
 import com.zynvora.flash_ticket_system.Dto.SignupRequest;
 import com.zynvora.flash_ticket_system.Service.AuthService;
 
@@ -42,6 +43,13 @@ public class authController {
         
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(authreposne);
     }
+
+    @PostMapping("/verify")
+    public AuthResponse verifyRefreshToken(@RequestBody RefreshTokenRequest request) {
+        AuthResponse authResponse = authService.refreshToken(request);
+        return authResponse;
+    }
+    
     
     
 }
