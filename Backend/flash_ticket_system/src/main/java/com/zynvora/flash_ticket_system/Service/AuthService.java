@@ -57,5 +57,21 @@ public class AuthService {
 
         userRepository.save(user);
     }
+
+    public void registerAdmin(SignupRequest request){
+        if (userRepository.existsByEmail(request.getEmail())) {
+            throw new RuntimeException("User Already Exists with this email");
+        }
+
+        Role role = roleRepository.findByRoleName("ROLE_ADMIN").orElseThrow(()-> new RuntimeException("Role Not Found"));
+
+        User user = new User();
+        user.setName(request.getName());
+        user.setEmail(request.getEmail());
+        user.getRoles().add(role);
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+
+        userRepository.save(user);
+    }
     
 }

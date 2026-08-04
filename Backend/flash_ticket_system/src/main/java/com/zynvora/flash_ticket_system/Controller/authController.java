@@ -29,6 +29,13 @@ public class authController {
         return ResponseEntity.status(HttpStatus.CREATED).body("Successfully User is Registered");
     }
 
+    //only admin can access
+    @PostMapping("/registerAdmin")
+    public ResponseEntity<String> registerAdmin(@Valid @RequestBody SignupRequest signupRequest) {
+        authService.registerAdmin(signupRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Successfully Admin is Registered");
+    }
+
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
         AuthResponse authreposne = authService.login(request);
