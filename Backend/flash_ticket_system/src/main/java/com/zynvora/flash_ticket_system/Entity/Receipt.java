@@ -31,7 +31,7 @@ public class Receipt {
     private Long id;
 
     @Column(unique = true,nullable = false)
-    private String receipt_number;
+    private String receiptNumber;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn (name = "booking_id" , nullable = false)

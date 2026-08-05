@@ -15,3 +15,9 @@ spring:
       ddl-auto: update
     show-sql: true
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+
+jwt:
+  secret: 6A2A49E3F2F7C96B8E1A5C3D9E7F4A8B6C2D5F1E9A7B3C6D
+  access-expiration: 900000 #15 mint
+  refresh-expiration: 604800000 # 7 Days
