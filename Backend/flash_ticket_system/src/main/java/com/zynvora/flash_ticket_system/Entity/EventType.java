@@ -18,6 +18,6 @@ public class EventType {
     private Long id;
 
     @Column(nullable = false)
-    private String event_type;
+    private String eventType;
 
 }

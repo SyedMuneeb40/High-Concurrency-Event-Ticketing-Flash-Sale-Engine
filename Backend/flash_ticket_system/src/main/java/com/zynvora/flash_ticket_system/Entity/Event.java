@@ -1,5 +1,8 @@
 package com.zynvora.flash_ticket_system.Entity;
 
+
+import java.math.BigDecimal;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -18,7 +21,7 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false)
-    private String event_name;
+    private String eventName;
     @ManyToOne (fetch = FetchType.EAGER)
     @JoinTable(
         name = "event_mode",
@@ -31,5 +34,10 @@ public class Event {
     @Column(nullable = false)
     private Integer  reserved_seats;
     @Column(nullable = false)
-    private Integer  ticket_price;
+    private BigDecimal  ticket_price;
+    @Column(nullable = false)
+    private String eventAt;
+    @Column(nullable = false)
+    private String createdAt;
+
 }
