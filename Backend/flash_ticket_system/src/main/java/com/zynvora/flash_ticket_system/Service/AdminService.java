@@ -1,9 +1,11 @@
 package com.zynvora.flash_ticket_system.Service;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import com.zynvora.flash_ticket_system.Dto.EventResponse;
@@ -21,9 +23,10 @@ import lombok.RequiredArgsConstructor;
 public class AdminService {
     private final EventRepository eventRepository;
     private final EventTypeRepository eventTypeRepository;
+    private final RedisTemplate<String, Integer> redisTemplate;
 
 
-    public EventResponse addEvent(String event_name,String event_mode,Integer total_Seats,Integer reserved_seats,BigDecimal Price,LocalDateTime localDateTime){
+    public EventResponse addEvent(String event_name,String event_mode,Integer total_Seats,BigDecimal Price,LocalDateTime localDateTime){
         EventType type = eventTypeRepository.findByEventType(event_mode).orElseThrow(()-> new RuntimeException("This "+event_mode+" event type not found!"));
         
         LocalDateTime currenDateTime = LocalDateTime.now();
@@ -34,11 +37,16 @@ public class AdminService {
         event.setEventName(event_name);
         event.setEvent_mode(type);
         event.setTotal_seats(total_Seats);
-        event.setReserved_seats(reserved_seats);
+        event.setReserved_seats(total_Seats);
         event.setEventAt(formatedEventDate);
         event.setCreatedAt(formatedCurrentDate);
         event.setTicket_price(Price);
         eventRepository.save(event);
+
+        LocalDateTime eventDate = LocalDateTime.parse(event.getEventAt(), dtf);
+        Duration ttl = Duration.between(LocalDateTime.now(), eventDate.plusHours(6));
+        redisTemplate.opsForValue().set("event:"+event.getId()+":available",event.getReserved_seats(),ttl);
+
         EventResponse eventResponse = new EventResponse(event,"Successfully Created Event");
         return eventResponse;
     }

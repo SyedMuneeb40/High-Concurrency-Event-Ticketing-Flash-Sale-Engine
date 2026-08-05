@@ -1,6 +1,6 @@
 package com.zynvora.flash_ticket_system.Entity;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -33,8 +33,11 @@ public class Booking {
     private User user;
 
     @Column(nullable = false)
+    private Integer seatQuantity;
+
+    @Column(nullable = false)
     @CreationTimestamp
-    private Timestamp bookedAt;
+    private LocalDateTime bookedAt;
 
     @OneToOne(mappedBy = "booking")
     private Receipt receipt;
