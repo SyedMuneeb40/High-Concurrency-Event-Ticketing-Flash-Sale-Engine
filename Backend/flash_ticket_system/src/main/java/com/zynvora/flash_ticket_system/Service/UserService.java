@@ -1,5 +1,6 @@
 package com.zynvora.flash_ticket_system.Service;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.redisson.api.RLock;
@@ -12,6 +13,7 @@ import com.zynvora.flash_ticket_system.Dto.BookingResponse;
 import com.zynvora.flash_ticket_system.Entity.Booking;
 import com.zynvora.flash_ticket_system.Entity.Event;
 import com.zynvora.flash_ticket_system.Entity.User;
+import com.zynvora.flash_ticket_system.Enums.BookingStatus;
 import com.zynvora.flash_ticket_system.Repository.BookingRepository;
 import com.zynvora.flash_ticket_system.Repository.EventRepository;
 import com.zynvora.flash_ticket_system.Repository.UserRepository;
@@ -68,6 +70,7 @@ public class UserService {
             booking.setEvent(event);
             booking.setUser(user);
             booking.setSeatQuantity(seatsQuantity);
+            booking.setBookingStatus(BookingStatus.COMPLETED);
             bookingRepository.save(booking);
 
             event.setReserved_seats(event.getReserved_seats() - seatsQuantity);
@@ -92,6 +95,64 @@ public class UserService {
             }
         }
         
+    }
+
+    public BookingResponse cancelBooking(Long bookingId){
+        Booking booking  = bookingRepository.findById(bookingId).orElseThrow(()->new RuntimeException("There is no Booking found With this id"));
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByEmail(email).orElseThrow(()-> new RuntimeException("No User Found with this Email"));
+        Event event = booking.getEvent();
+        boolean redisUpdated = false;
+
+        if (!booking.getUser().getId().equals(user.getId())) {
+            throw new RuntimeException("You are not the owner of this Booking So you cant Cancel it");
+        }
+          if (booking.getBookingStatus() == BookingStatus.CANCELLED) {
+            throw new RuntimeException("Booking is already cancelled");
+        }
+
+        RLock lock = redissonClient.getLock("lock:event:"+event.getId());
+
+        try{
+            boolean locked = lock.tryLock(5,30,TimeUnit.SECONDS);
+
+            if (!locked) {
+                 throw new RuntimeException("Server is Busy. Try Again in few Seconds");
+            }
+
+            redisTemplate.opsForValue().increment("event:"+event.getId()+":available", booking.getSeatQuantity());
+            redisUpdated = true;
+            booking.setBookingStatus(BookingStatus.CANCELLED);
+            bookingRepository.save(booking);
+
+            event.setReserved_seats(event.getReserved_seats() + booking.getSeatQuantity());
+            eventRepository.save(event);
+            return new BookingResponse(booking,"Booking has been cancelled");
+
+        }catch(InterruptedException e){
+            Thread.currentThread().interrupt();
+            if (redisUpdated) {
+                redisTemplate.opsForValue().decrement("event:"+event.getId()+":available", booking.getSeatQuantity());
+            }
+            throw new RuntimeException("Thread interrupted while acquiring lock", e);
+
+        }catch(RuntimeException e){
+            if (redisUpdated) {
+                redisTemplate.opsForValue().decrement("event:"+event.getId()+":available", booking.getSeatQuantity());
+            }
+            throw e;
+        }finally{
+            if (lock.isHeldByCurrentThread()) {
+                lock.unlock();
+            }
+        }
+    }
+
+    public List<Booking> getAllBooking(){
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByEmail(email).orElseThrow(()-> new RuntimeException("User Not Found In DB"));
+        List<Booking> allBooking = bookingRepository.findByUserId(user.getId());
+        return allBooking;
     }
     
 }
