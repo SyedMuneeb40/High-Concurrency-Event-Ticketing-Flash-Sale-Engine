@@ -26,7 +26,7 @@ public class AdminService {
     private final EventTypeRepository eventTypeRepository;
     private final RedisTemplate<String, Integer> redisTemplate;
 
-    public EventResponse addEvent(String event_name,String event_mode,Integer total_Seats,BigDecimal Price,LocalDateTime localDateTime){
+    public EventResponse addEvent(String event_name,String event_mode,Integer total_Seats,BigDecimal Price,LocalDateTime localDateTime ,String imageUrl){
         EventType type = eventTypeRepository.findByEventType(event_mode).orElseThrow(()-> new RuntimeException("This "+event_mode+" event type not found!"));
         
         LocalDateTime currenDateTime = LocalDateTime.now();
@@ -39,6 +39,7 @@ public class AdminService {
         event.setEvent_mode(type);
         event.setTotal_seats(total_Seats);
         event.setReserved_seats(total_Seats);
+        event.setImageUrl(imageUrl);
         event.setEventAt(formatedEventDate);
         event.setCreatedAt(formatedCurrentDate);
         event.setTicket_price(Price);

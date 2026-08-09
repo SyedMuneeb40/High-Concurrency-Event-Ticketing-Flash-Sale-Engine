@@ -10,6 +10,7 @@ public class EventRequest {
     private String event_name;
     private String event_mode;
     private Integer total_Seats;
+    private String imageUrl;
     private BigDecimal Price;
     private LocalDateTime localDateTime;
 }

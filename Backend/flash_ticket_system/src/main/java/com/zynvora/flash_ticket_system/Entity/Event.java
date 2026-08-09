@@ -35,6 +35,8 @@ public class Event {
     private Integer  reserved_seats;
     @Column(nullable = false)
     private BigDecimal  ticket_price;
+    @Column(name = "image_url" , nullable = false)
+    private String imageUrl;
     @Column(nullable = false)
     private String eventAt;
     @Column(nullable = false)

@@ -1,5 +1,10 @@
 package com.zynvora.flash_ticket_system.Controller;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -7,7 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.zynvora.flash_ticket_system.Dto.EventRequest;
 import com.zynvora.flash_ticket_system.Dto.EventResponse;
@@ -29,9 +36,16 @@ public class adminController {
 
     private final AdminService adminService;
     
-    @PostMapping("/addEvent")
-    public ResponseEntity<EventResponse> addEvent(@RequestBody EventRequest request) {
-        EventResponse response =  adminService.addEvent(request.getEvent_name(),request.getEvent_mode(), request.getTotal_Seats(), request.getPrice(), request.getLocalDateTime());
+    @PostMapping(value = "/addEvent" , consumes = "multipart/form-data")
+    public ResponseEntity<EventResponse> addEvent(@RequestPart("event") EventRequest request , @RequestPart("image") MultipartFile image) throws IOException{
+        Path uploadPath = Paths.get("Uploads/Events");
+        Files.createDirectories(uploadPath);
+        Path filePath = uploadPath.resolve(image.getOriginalFilename());
+        Files.copy(image.getInputStream(),filePath,StandardCopyOption.REPLACE_EXISTING);
+        String imageUrl = "uploads/events/" + image.getOriginalFilename();
+
+
+        EventResponse response =  adminService.addEvent(request.getEvent_name(),request.getEvent_mode(), request.getTotal_Seats(), request.getPrice(), request.getLocalDateTime(),imageUrl);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
