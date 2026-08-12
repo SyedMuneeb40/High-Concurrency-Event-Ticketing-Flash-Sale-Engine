@@ -4,5 +4,6 @@ public enum PaymentMethod {
     CARD,
     JAZZCASH,
     EASYPAISA,
-    BANK_TRANSFER
+    BANK_TRANSFER,
+    CASH
 }

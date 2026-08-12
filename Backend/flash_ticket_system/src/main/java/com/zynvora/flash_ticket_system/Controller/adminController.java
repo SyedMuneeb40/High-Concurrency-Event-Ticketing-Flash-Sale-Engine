@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -44,8 +45,11 @@ public class adminController {
         Files.copy(image.getInputStream(),filePath,StandardCopyOption.REPLACE_EXISTING);
         String imageUrl = "uploads/events/" + image.getOriginalFilename();
 
+        LocalDateTime eventDateTime = request.getLocalDateTime();
+        String dateTimeString = (eventDateTime != null) ? eventDateTime.toString() : LocalDateTime.now().toString();
 
-        EventResponse response =  adminService.addEvent(request.getEvent_name(),request.getEvent_mode(), request.getTotal_Seats(), request.getPrice(), request.getLocalDateTime(),imageUrl);
+
+        EventResponse response =  adminService.addEvent(request.getEvent_name(),request.getEvent_mode(), request.getTotal_Seats(), request.getPrice(), dateTimeString,imageUrl);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 

@@ -25,6 +25,9 @@ public class logoutController {
 
     @PostMapping("/logout")
     public ResponseEntity<String> logout(Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
+        }
         String email = authentication.getName();
         User user = userRepository.findByEmail(email).orElseThrow(()->new RuntimeException("User Not Found"));
         redisTemplate.delete("refresh:user:"+user.getId());

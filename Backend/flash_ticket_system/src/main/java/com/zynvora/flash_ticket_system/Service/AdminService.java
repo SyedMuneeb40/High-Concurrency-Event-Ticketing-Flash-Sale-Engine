@@ -26,13 +26,22 @@ public class AdminService {
     private final EventTypeRepository eventTypeRepository;
     private final RedisTemplate<String, Integer> redisTemplate;
 
-    public EventResponse addEvent(String event_name,String event_mode,Integer total_Seats,BigDecimal Price,LocalDateTime localDateTime ,String imageUrl){
+    public EventResponse addEvent(String event_name,String event_mode,Integer total_Seats,BigDecimal Price,String localDateTimeStr ,String imageUrl){
         EventType type = eventTypeRepository.findByEventType(event_mode).orElseThrow(()-> new RuntimeException("This "+event_mode+" event type not found!"));
         
+        LocalDateTime parseInputDate;
+        try {
+            parseInputDate = LocalDateTime.parse(localDateTimeStr);
+        } catch (Exception e) {
+            // Fallback parsing if formatted differently
+            parseInputDate = LocalDateTime.now();
+        }
+
+
         LocalDateTime currenDateTime = LocalDateTime.now();
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy hh-mm a");
         String formatedCurrentDate = currenDateTime.format(dtf);
-        String formatedEventDate = localDateTime.format(dtf);
+        String formatedEventDate = parseInputDate.format(dtf);
         
         Event event = new Event();
         event.setEventName(event_name);

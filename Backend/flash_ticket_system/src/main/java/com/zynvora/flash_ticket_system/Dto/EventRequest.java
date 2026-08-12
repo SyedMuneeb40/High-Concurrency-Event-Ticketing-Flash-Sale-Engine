@@ -3,6 +3,8 @@ package com.zynvora.flash_ticket_system.Dto;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Data;
 
 @Data
@@ -12,5 +14,6 @@ public class EventRequest {
     private Integer total_Seats;
     private String imageUrl;
     private BigDecimal Price;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime localDateTime;
 }
