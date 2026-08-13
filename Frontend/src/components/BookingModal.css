@@ -1,0 +1,536 @@
+/* =========================================================
+   BOOKING OVERLAY
+========================================================= */
+
+.booking-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 9999;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  background: rgba(15, 23, 42, 0.62);
+
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
+}
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+.booking-modal {
+  position: relative;
+
+  width: min(760px, 100%);
+
+  max-height: calc(100vh - 40px);
+
+  display: grid;
+
+  grid-template-columns:
+    0.9fr 1.1fr;
+
+  overflow: hidden;
+
+  border-radius: 18px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 25px 80px
+    rgba(15, 23, 42, 0.30);
+
+  animation:
+    bookingModalIn 0.2s ease;
+}
+
+@keyframes bookingModalIn {
+
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(12px)
+      scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0)
+      scale(1);
+  }
+}
+
+/* =========================================================
+   CLOSE BUTTON
+========================================================= */
+
+.booking-close-button {
+  position: absolute;
+
+  top: 12px;
+  right: 12px;
+
+  z-index: 5;
+
+  width: 34px;
+  height: 34px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.92);
+
+  color: #111827;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 3px 12px rgba(0, 0, 0, 0.12);
+}
+
+.booking-close-button:hover {
+  background: #ffffff;
+}
+
+/* =========================================================
+   IMAGE
+========================================================= */
+
+.booking-modal-image {
+  min-height: 480px;
+
+  background: #eef1f5;
+
+  overflow: hidden;
+}
+
+.booking-modal-image img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+}
+
+.booking-modal-no-image {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  color: #98a2b3;
+
+  background: #f2f4f7;
+}
+
+/* =========================================================
+   BODY
+========================================================= */
+
+.booking-modal-body {
+  padding: 34px 30px;
+
+  overflow-y: auto;
+
+  color: #111827;
+}
+
+/* =========================================================
+   TYPE
+========================================================= */
+
+.booking-modal-type {
+  display: inline-block;
+
+  color: #667085;
+
+  font-size: 10px;
+  font-weight: 800;
+
+  letter-spacing: 0.12em;
+
+  text-transform: uppercase;
+}
+
+/* =========================================================
+   TITLE
+========================================================= */
+
+.booking-modal-body h2 {
+  margin: 8px 0 0;
+
+  color: #111827;
+
+  font-size: 27px;
+  font-weight: 800;
+
+  line-height: 1.2;
+
+  letter-spacing: -0.03em;
+}
+
+/* =========================================================
+   DATE / TIME
+========================================================= */
+
+.booking-info-row {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 10px;
+
+  margin-top: 22px;
+}
+
+.booking-info-item {
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 9px;
+
+  padding: 12px;
+
+  border: 1px solid #eaecf0;
+
+  border-radius: 10px;
+
+  background: #f9fafb;
+
+  color: #667085;
+}
+
+.booking-info-item svg {
+  margin-top: 2px;
+
+  flex-shrink: 0;
+
+  color: #667085;
+}
+
+.booking-info-item div {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 3px;
+}
+
+.booking-info-item small {
+  color: #98a2b3;
+
+  font-size: 9px;
+}
+
+.booking-info-item strong {
+  color: #111827;
+
+  font-size: 11px;
+}
+
+/* =========================================================
+   AVAILABLE SEATS
+========================================================= */
+
+.available-seats-box {
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+
+  margin-top: 14px;
+
+  padding: 12px 14px;
+
+  border-radius: 10px;
+
+  background: #f0fdf4;
+
+  color: #15803d;
+
+  font-size: 11px;
+}
+
+.available-seats-box svg {
+  flex-shrink: 0;
+}
+
+.available-seats-box strong {
+  font-weight: 800;
+}
+
+/* =========================================================
+   TICKET SELECTION
+========================================================= */
+
+.ticket-selection {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  margin-top: 25px;
+
+  padding: 17px 0;
+
+  border-top: 1px solid #eaecf0;
+
+  border-bottom: 1px solid #eaecf0;
+}
+
+.ticket-selection-info {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 4px;
+}
+
+.ticket-selection-info strong {
+  color: #111827;
+
+  font-size: 12px;
+}
+
+.ticket-selection-info span {
+  color: #98a2b3;
+
+  font-size: 10px;
+}
+
+/* =========================================================
+   QUANTITY
+========================================================= */
+
+.quantity-control {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+}
+
+.quantity-control button {
+  width: 32px;
+  height: 32px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid #d0d5dd;
+
+  border-radius: 8px;
+
+  background: #ffffff;
+
+  color: #111827;
+
+  cursor: pointer;
+}
+
+.quantity-control button:hover:not(:disabled) {
+  background: #f2f4f7;
+}
+
+.quantity-control span {
+  min-width: 22px;
+
+  text-align: center;
+
+  color: #111827;
+
+  font-size: 14px;
+  font-weight: 800;
+}
+
+/* =========================================================
+   TOTAL
+========================================================= */
+
+.booking-total-row {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  margin-top: 20px;
+}
+
+.booking-total-row span {
+  color: #667085;
+
+  font-size: 12px;
+}
+
+.booking-total-row strong {
+  color: #111827;
+
+  font-size: 20px;
+  font-weight: 800;
+}
+
+/* =========================================================
+   CONFIRM BUTTON
+========================================================= */
+
+.confirm-booking-button {
+  width: 100%;
+
+  height: 44px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  margin-top: 20px;
+
+  border: none;
+
+  border-radius: 9px;
+
+  background: #111827;
+
+  color: #ffffff;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease;
+}
+
+.confirm-booking-button:hover:not(:disabled) {
+  background: #1f2937;
+}
+
+/* =========================================================
+   CANCEL
+========================================================= */
+
+.cancel-booking-button {
+  width: 100%;
+
+  height: 40px;
+
+  margin-top: 8px;
+
+  border: none;
+
+  border-radius: 9px;
+
+  background: transparent;
+
+  color: #667085;
+
+  font-size: 11px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.cancel-booking-button:hover:not(:disabled) {
+  background: #f2f4f7;
+
+  color: #111827;
+}
+
+/* =========================================================
+   SPINNER
+========================================================= */
+
+.booking-spinner {
+  animation:
+    bookingSpin 0.8s linear infinite;
+}
+
+@keyframes bookingSpin {
+
+  to {
+    transform: rotate(360deg);
+  }
+
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 700px) {
+
+  .booking-overlay {
+    padding: 12px;
+  }
+
+  .booking-modal {
+    max-height: calc(100vh - 24px);
+
+    grid-template-columns: 1fr;
+
+    overflow-y: auto;
+  }
+
+  .booking-modal-image {
+    min-height: 220px;
+
+    height: 220px;
+  }
+
+  .booking-modal-body {
+    padding: 24px 20px;
+  }
+
+  .booking-modal-body h2 {
+    font-size: 23px;
+  }
+
+}
+
+@media (max-width: 480px) {
+
+  .booking-info-row {
+    grid-template-columns: 1fr;
+  }
+
+  .ticket-selection {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+  .quantity-control {
+    align-self: flex-end;
+  }
+
+}
