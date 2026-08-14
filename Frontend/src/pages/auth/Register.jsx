@@ -51,7 +51,7 @@ const Register = () => {
 
       await registerUser(
         form.name,
-        form.email,
+        form.email.toLowerCase(),
         form.password
       );
 

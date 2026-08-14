@@ -31,7 +31,7 @@ const Login = () => {
       setLoading(true);
 
       // Login API
-      await loginUser(email, password);
+      await loginUser(email.toLowerCase(), password);
 
       // Get role from JWT after successful login
       const role = getUserRole();

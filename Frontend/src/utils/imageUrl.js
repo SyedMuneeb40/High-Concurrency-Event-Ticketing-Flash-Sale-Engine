@@ -2,44 +2,31 @@ const API_URL =
   import.meta.env.VITE_API_URL ||
   "http://localhost:8080";
 
+export const getImageUrl = (imageUrl) => {
+  if (!imageUrl) {
+    return "";
+  }
 
-export const getImageUrl =
-  (imageUrl) => {
+  // Already complete URL
+  if (
+    imageUrl.startsWith("http://") ||
+    imageUrl.startsWith("https://")
+  ) {
+    return imageUrl;
+  }
 
-    if (!imageUrl) {
-      return "";
-    }
+  // Remove leading slash
+  let cleanPath = imageUrl.startsWith("/")
+    ? imageUrl.substring(1)
+    : imageUrl;
 
+  // IMPORTANT:
+  // Backend/database may return "uploads/events/..."
+  // Actual Render folder is "Uploads/Events/..."
+  cleanPath = cleanPath.replace(
+    /^uploads\/events\//i,
+    "uploads/Events/"
+  );
 
-    /*
-     * Already a complete URL
-     */
-
-    if (
-      imageUrl.startsWith(
-        "http://"
-      ) ||
-      imageUrl.startsWith(
-        "https://"
-      )
-    ) {
-
-      return imageUrl;
-
-    }
-
-
-    /*
-     * Remove accidental leading slash
-     */
-
-    const cleanPath =
-      imageUrl.startsWith("/")
-        ? imageUrl.substring(1)
-        : imageUrl;
-
-
-    return `${API_URL}/${cleanPath}`;
-
-  };
-
+  return `${API_URL}/${cleanPath}`;
+};

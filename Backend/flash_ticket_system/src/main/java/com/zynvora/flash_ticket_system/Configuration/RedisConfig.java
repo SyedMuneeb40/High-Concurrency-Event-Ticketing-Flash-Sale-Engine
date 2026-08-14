@@ -13,11 +13,24 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @Configuration
 public class RedisConfig {
     
-    @Bean
+// For localhost        
+//     @Bean
+//     public RedissonClient redissionClient(){
+//         Config config = new Config();
+//         config.useSingleServer()
+//                 .setAddress("redis://localhost:6379");
+//         return Redisson.create(config);
+//     } 
+
+     @Bean
     public RedissonClient redissionClient(){
         Config config = new Config();
+        config.setUsername("default");
+        config.setPassword("kpEXL8QCLb7wYnef5c2gjvNJkISP5Da9");
         config.useSingleServer()
-                .setAddress("redis://localhost:6379");
+                .setAddress("redis://farm-sunray-ink-21754.db.redis.io:13857")
+                .setConnectionPoolSize(4)
+                .setConnectionMinimumIdleSize(1);
         return Redisson.create(config);
     } 
 
