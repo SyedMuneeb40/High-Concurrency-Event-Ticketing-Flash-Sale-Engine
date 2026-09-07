@@ -39,7 +39,7 @@ public class adminController {
     
     @PostMapping(value = "/addEvent" , consumes = "multipart/form-data")
     public ResponseEntity<EventResponse> addEvent(@RequestPart("event") EventRequest request , @RequestPart("image") MultipartFile image) throws IOException{
-        Path uploadPath = Paths.get("Uploads/Events");
+        Path uploadPath = Paths.get("Uploads/events");
         Files.createDirectories(uploadPath);
         Path filePath = uploadPath.resolve(image.getOriginalFilename());
         Files.copy(image.getInputStream(),filePath,StandardCopyOption.REPLACE_EXISTING);
