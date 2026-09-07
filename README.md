@@ -2503,21 +2503,14 @@ docs/images/
 Frontend
 
 ```
-https://YOUR-NETLIFY-URL.netlify.app
+(https://flashticketsystem.netlify.app/)
 ```
 
 Backend API
 
 ```
-https://YOUR-BACKEND-URL
+(https://flash-ticket-backend.onrender.com)
 ```
-
-Swagger
-
-```
-https://YOUR-BACKEND-URL/swagger-ui/index.html
-```
-
 ---
 
 # 📜 API Documentation
@@ -2838,13 +2831,13 @@ React.js
 Frontend Repository
 
 ```
-(Add GitHub Repository URL)
+([Add GitHub Repository URL](https://github.com/SyedMuneeb40/High-Concurrency-Event-Ticketing-Flash-Sale-Engine/tree/master))
 ```
 
 Production URL
 
 ```
-(Add Netlify URL)
+(https://flashticketsystem.netlify.app/)
 ```
 
 The React application communicates with the backend through REST APIs.
@@ -2856,7 +2849,7 @@ The React application communicates with the backend through REST APIs.
 Production Backend
 
 ```
-(Add Backend Deployment URL)
+(https://flash-ticket-backend.onrender.com)
 ```
 
 Example providers
