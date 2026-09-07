@@ -35,8 +35,9 @@ public class SecurityConfig {
         .authenticationProvider(daoAuthenticationProvider())
         .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
         .authorizeHttpRequests(req -> req
-            .requestMatchers(HttpMethod.GET,"/admin/events","/admin/event/**","/uploads/**").permitAll()
+            .requestMatchers(HttpMethod.GET,"/admin/events","/admin/event/**").permitAll()
             .requestMatchers("/auth/**").permitAll()
+            .requestMatchers("/uploads/**", "/uploads/*", "/uploads/*/*").permitAll()
             .requestMatchers("/auth/logout").authenticated()
             .requestMatchers("/admin/**").hasRole("ADMIN")
             .requestMatchers("/user/**","/receipt/**").hasRole("USER")
