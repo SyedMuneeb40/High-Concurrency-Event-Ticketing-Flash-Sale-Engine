@@ -21,6 +21,7 @@ import com.zynvora.flash_ticket_system.Dto.EventRequest;
 import com.zynvora.flash_ticket_system.Dto.EventResponse;
 import com.zynvora.flash_ticket_system.Entity.Event;
 import com.zynvora.flash_ticket_system.Service.AdminService;
+import com.zynvora.flash_ticket_system.Service.CloudinaryService;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -36,22 +37,30 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class adminController {
 
     private final AdminService adminService;
-    
-    @PostMapping(value = "/addEvent" , consumes = "multipart/form-data")
-    public ResponseEntity<EventResponse> addEvent(@RequestPart("event") EventRequest request , @RequestPart("image") MultipartFile image) throws IOException{
-        Path uploadPath = Paths.get("Uploads/events");
-        Files.createDirectories(uploadPath);
-        Path filePath = uploadPath.resolve(image.getOriginalFilename());
-        Files.copy(image.getInputStream(),filePath,StandardCopyOption.REPLACE_EXISTING);
-        String imageUrl = "uploads/events/" + image.getOriginalFilename();
+        private final CloudinaryService cloudinaryService;
+
+   @PostMapping(value = "/addEvent", consumes = "multipart/form-data")
+    public ResponseEntity<EventResponse> addEvent(
+            @RequestPart("event") EventRequest request,
+            @RequestPart("image") MultipartFile image) throws IOException {
+
+        // Local disk save hata diya — ab Cloudinary pe upload
+        String imageUrl = cloudinaryService.uploadImage(image);
 
         LocalDateTime eventDateTime = request.getLocalDateTime();
         String dateTimeString = (eventDateTime != null) ? eventDateTime.toString() : LocalDateTime.now().toString();
 
-
-        EventResponse response =  adminService.addEvent(request.getEvent_name(),request.getEvent_mode(), request.getTotal_Seats(), request.getPrice(), dateTimeString,imageUrl);
+        EventResponse response = adminService.addEvent(
+                request.getEvent_name(),
+                request.getEvent_mode(),
+                request.getTotal_Seats(),
+                request.getPrice(),
+                dateTimeString,
+                imageUrl
+        );
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
+
 
     @PutMapping("/update/{event_id}")
     public ResponseEntity<EventResponse> updateEvent(@PathVariable Long event_id, @RequestBody Event updatedEvent) {
