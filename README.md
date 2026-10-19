@@ -213,7 +213,7 @@ This keeps local development completely isolated from production deployment.
 | Version Control | Git |
 | Repository | GitHub |
 | Testing | JMeter |
-| Deployment | *(To be Added)* |
+| Deployment | Render/Netlify |
 
 ---
 
